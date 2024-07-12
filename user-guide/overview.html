@@ -143,6 +143,11 @@ under the License.
    Compatibility Guide
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="tuning.html">
+   Tuning Guide
+  </a>
+ </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
@@ -168,6 +173,26 @@ under the License.
  <li class="toctree-l1">
   <a class="reference internal" href="../contributor-guide/debugging.html">
    Debugging Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../contributor-guide/benchmarking.html">
+   Benchmarking Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../contributor-guide/adding_a_new_expression.html">
+   Adding a New Expression
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../contributor-guide/profiling_native_code.html">
+   Profiling Native Code
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../contributor-guide/spark-sql-tests.html">
+   Spark SQL Tests
   </a>
  </li>
  <li class="toctree-l1">
@@ -312,7 +337,7 @@ typically faster and more resource efficient than JVM based runtimes.</p>
 <li><p>a native Parquet implementation, including both reader and writer</p></li>
 <li><p>full implementation of Spark operators, including
 Filter/Project/Aggregation/Join/Exchange etc.</p></li>
-<li><p>full implementation of Spark built-in expressions</p></li>
+<li><p>full implementation of Spark built-in expressions.</p></li>
 <li><p>a UDF framework for users to migrate their existing UDF to native</p></li>
 </ul>
 <section id="architecture">
@@ -322,7 +347,19 @@ Filter/Project/Aggregation/Join/Exchange etc.</p></li>
 </section>
 <section id="current-status">
 <h2>Current Status<a class="headerlink" href="#current-status" title="Link to this heading">¶</a></h2>
-<p>The project is currently integrated into Apache Spark 3.2, 3.3, and 3.4.</p>
+<p>Comet currently supports the following versions of Apache Spark:</p>
+<ul class="simple">
+<li><p>3.3.x</p></li>
+<li><p>3.4.x</p></li>
+</ul>
+<p>Experimental support is provided for the following versions of Apache Spark and is intended for development/testing
+use only and should not be used in production yet.</p>
+<ul class="simple">
+<li><p>3.5.x</p></li>
+<li><p>4.0.0-preview1</p></li>
+</ul>
+<p>Note that Comet may not fully work with proprietary forks of Apache Spark such as the Spark versions offered by
+Cloud Service Providers.</p>
 </section>
 <section id="feature-parity-with-apache-spark">
 <h2>Feature Parity with Apache Spark<a class="headerlink" href="#feature-parity-with-apache-spark" title="Link to this heading">¶</a></h2>

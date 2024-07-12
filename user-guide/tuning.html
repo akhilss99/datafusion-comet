@@ -24,7 +24,7 @@ under the License.
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Comet Configuration Settings &#8212; Apache DataFusion Comet  documentation</title>
+    <title>Tuning Guide &#8212; Apache DataFusion Comet  documentation</title>
     
     <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -53,6 +53,8 @@ under the License.
     <script async="true" defer="true" src="https://buttons.github.io/buttons.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Contributing to Apache DataFusion Comet" href="../contributor-guide/contributing.html" />
+    <link rel="prev" title="Compatibility Guide" href="compatibility.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
     
@@ -105,7 +107,7 @@ under the License.
   User Guide
  </span>
 </p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="overview.html">
    Comet Overview
@@ -141,6 +143,11 @@ under the License.
    Compatibility Guide
   </a>
  </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Tuning Guide
+  </a>
+ </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
@@ -166,6 +173,26 @@ under the License.
  <li class="toctree-l1">
   <a class="reference internal" href="../contributor-guide/debugging.html">
    Debugging Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../contributor-guide/benchmarking.html">
+   Benchmarking Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../contributor-guide/adding_a_new_expression.html">
+   Adding a New Expression
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../contributor-guide/profiling_native_code.html">
+   Profiling Native Code
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../contributor-guide/spark-sql-tests.html">
+   Spark SQL Tests
   </a>
  </li>
  <li class="toctree-l1">
@@ -233,9 +260,43 @@ under the License.
               
               <div class="toc-item">
                 
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
 
 <nav id="bd-toc-nav">
-    
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#shuffle">
+   Shuffle
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#shuffle-mode">
+     Shuffle Mode
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#columnar-shuffle">
+       Columnar Shuffle
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#native-shuffle">
+       Native Shuffle
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#auto-mode">
+     Auto Mode
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
 </nav>
               </div>
               
@@ -243,7 +304,7 @@ under the License.
                 
 
 <div class="tocsection editthispage">
-    <a href="https://github.com/apache/datafusion-comet/edit/main/docs/source/user-guide/configs-template.md">
+    <a href="https://github.com/apache/datafusion-comet/edit/main/docs/source/user-guide/tuning.md">
         <i class="fas fa-pencil-alt"></i> Edit this page
     </a>
 </div>
@@ -263,27 +324,65 @@ under the License.
               <div>
                 
   <!---
-  Licensed to the Apache Software Foundation (ASF) under one
-  or more contributor license agreements.  See the NOTICE file
-  distributed with this work for additional information
-  regarding copyright ownership.  The ASF licenses this file
-  to you under the Apache License, Version 2.0 (the
-  "License"); you may not use this file except in compliance
-  with the License.  You may obtain a copy of the License at
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
-  Unless required by applicable law or agreed to in writing,
-  software distributed under the License is distributed on an
-  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-  KIND, either express or implied.  See the License for the
-  specific language governing permissions and limitations
-  under the License.
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
 -->
-<section id="comet-configuration-settings">
-<h1>Comet Configuration Settings<a class="headerlink" href="#comet-configuration-settings" title="Link to this heading">¶</a></h1>
-<p>Comet provides the following configuration settings.</p>
-<!--CONFIG_TABLE-->
+<section id="tuning-guide">
+<h1>Tuning Guide<a class="headerlink" href="#tuning-guide" title="Link to this heading">¶</a></h1>
+<p>Comet provides some tuning options to help you get the best performance from your queries.</p>
+<section id="shuffle">
+<h2>Shuffle<a class="headerlink" href="#shuffle" title="Link to this heading">¶</a></h2>
+<p>Comet provides Comet shuffle features that can be used to improve the performance of your queries.
+The following sections describe the different shuffle options available in Comet.</p>
+<p>To enable Comet shuffle, set the following configuration in your Spark configuration:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">spark</span><span class="o">.</span><span class="n">shuffle</span><span class="o">.</span><span class="n">manager</span><span class="o">=</span><span class="n">org</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="o">.</span><span class="n">comet</span><span class="o">.</span><span class="n">execution</span><span class="o">.</span><span class="n">shuffle</span><span class="o">.</span><span class="n">CometShuffleManager</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">comet</span><span class="o">.</span><span class="n">exec</span><span class="o">.</span><span class="n">shuffle</span><span class="o">.</span><span class="n">enabled</span><span class="o">=</span><span class="n">true</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">spark.shuffle.manager</span></code> is a Spark static configuration which cannot be changed at runtime.
+It must be set before the Spark context is created. You can enable or disable Comet shuffle
+at runtime by setting <code class="docutils literal notranslate"><span class="pre">spark.comet.exec.shuffle.enabled</span></code> to <code class="docutils literal notranslate"><span class="pre">true</span></code> or <code class="docutils literal notranslate"><span class="pre">false</span></code>.
+Once it is disabled, Comet will fallback to the default Spark shuffle manager.</p>
+<blockquote>
+<div><p><strong><em>NOTE:</em></strong> At the moment Comet Shuffle is not compatible with Spark AQE partition coalesce. To disable set <code class="docutils literal notranslate"><span class="pre">spark.sql.adaptive.coalescePartitions.enabled</span></code> to <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+</div></blockquote>
+<section id="shuffle-mode">
+<h3>Shuffle Mode<a class="headerlink" href="#shuffle-mode" title="Link to this heading">¶</a></h3>
+<p>Comet provides three shuffle modes: Columnar Shuffle, Native Shuffle and Auto Mode.</p>
+<section id="columnar-shuffle">
+<h4>Columnar Shuffle<a class="headerlink" href="#columnar-shuffle" title="Link to this heading">¶</a></h4>
+<p>By default, once <code class="docutils literal notranslate"><span class="pre">spark.comet.exec.shuffle.enabled</span></code> is enabled, Comet uses JVM-based columnar shuffle
+to improve the performance of shuffle operations. Columnar shuffle supports HashPartitioning,
+RoundRobinPartitioning, RangePartitioning and SinglePartitioning. This mode has the highest
+query coverage.</p>
+<p>Columnar shuffle can be enabled by setting <code class="docutils literal notranslate"><span class="pre">spark.comet.exec.shuffle.mode</span></code> to <code class="docutils literal notranslate"><span class="pre">jvm</span></code>.</p>
+</section>
+<section id="native-shuffle">
+<h4>Native Shuffle<a class="headerlink" href="#native-shuffle" title="Link to this heading">¶</a></h4>
+<p>Comet also provides a fully native shuffle implementation that can be used to improve the performance.
+To enable native shuffle, just set <code class="docutils literal notranslate"><span class="pre">spark.comet.exec.shuffle.mode</span></code> to <code class="docutils literal notranslate"><span class="pre">native</span></code></p>
+<p>Native shuffle only supports HashPartitioning and SinglePartitioning.</p>
+</section>
+</section>
+<section id="auto-mode">
+<h3>Auto Mode<a class="headerlink" href="#auto-mode" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">spark.comet.exec.shuffle.mode</span></code> to <code class="docutils literal notranslate"><span class="pre">auto</span></code> will let Comet choose the best shuffle mode based on the query plan.</p>
+</section>
+</section>
 </section>
 
 
@@ -292,6 +391,20 @@ under the License.
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="compatibility.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Compatibility Guide</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="../contributor-guide/contributing.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Contributing to Apache DataFusion Comet</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
 </div>
               
           </main>

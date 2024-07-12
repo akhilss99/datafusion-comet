@@ -53,7 +53,7 @@ under the License.
     <script async="true" defer="true" src="https://buttons.github.io/buttons.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Contributing to Apache DataFusion Comet" href="../contributor-guide/contributing.html" />
+    <link rel="next" title="Tuning Guide" href="tuning.html" />
     <link rel="prev" title="Comet Configuration Settings" href="configs.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
@@ -143,6 +143,11 @@ under the License.
    Compatibility Guide
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="tuning.html">
+   Tuning Guide
+  </a>
+ </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
@@ -168,6 +173,26 @@ under the License.
  <li class="toctree-l1">
   <a class="reference internal" href="../contributor-guide/debugging.html">
    Debugging Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../contributor-guide/benchmarking.html">
+   Benchmarking Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../contributor-guide/adding_a_new_expression.html">
+   Adding a New Expression
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../contributor-guide/profiling_native_code.html">
+   Profiling Native Code
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../contributor-guide/spark-sql-tests.html">
+   Spark SQL Tests
   </a>
  </li>
  <li class="toctree-l1">
@@ -502,24 +527,80 @@ Spark.</p></li>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p>float</p></td>
+<td><p>byte</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>float</p></td>
+<td><p>short</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>float</p></td>
+<td><p>integer</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>float</p></td>
+<td><p>long</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>float</p></td>
 <td><p>double</p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p>float</p></td>
+<td><p>decimal</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>float</p></td>
 <td><p>string</p></td>
 <td><p>There can be differences in precision. For example, the input “1.4E-45” will produce 1.0E-45 instead of 1.4E-45</p></td>
 </tr>
-<tr class="row-even"><td><p>double</p></td>
+<tr class="row-odd"><td><p>double</p></td>
 <td><p>boolean</p></td>
 <td><p></p></td>
 </tr>
+<tr class="row-even"><td><p>double</p></td>
+<td><p>byte</p></td>
+<td><p></p></td>
+</tr>
 <tr class="row-odd"><td><p>double</p></td>
+<td><p>short</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>double</p></td>
+<td><p>integer</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>double</p></td>
+<td><p>long</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>double</p></td>
 <td><p>float</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>double</p></td>
+<td><p>decimal</p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p>double</p></td>
 <td><p>string</p></td>
 <td><p>There can be differences in precision. For example, the input “1.4E-45” will produce 1.0E-45 instead of 1.4E-45</p></td>
+</tr>
+<tr class="row-odd"><td><p>decimal</p></td>
+<td><p>byte</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>decimal</p></td>
+<td><p>short</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>decimal</p></td>
+<td><p>integer</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>decimal</p></td>
+<td><p>long</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p>decimal</p></td>
 <td><p>float</p></td>
@@ -553,23 +634,27 @@ Spark.</p></li>
 <td><p>binary</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p>date</p></td>
+<tr class="row-odd"><td><p>string</p></td>
+<td><p>date</p></td>
+<td><p>Only supports years between 262143 BC and 262142 AD</p></td>
+</tr>
+<tr class="row-even"><td><p>date</p></td>
 <td><p>string</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p>timestamp</p></td>
+<tr class="row-odd"><td><p>timestamp</p></td>
 <td><p>long</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p>timestamp</p></td>
+<tr class="row-even"><td><p>timestamp</p></td>
 <td><p>decimal</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p>timestamp</p></td>
+<tr class="row-odd"><td><p>timestamp</p></td>
 <td><p>string</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p>timestamp</p></td>
+<tr class="row-even"><td><p>timestamp</p></td>
 <td><p>date</p></td>
 <td><p></p></td>
 </tr>
@@ -592,14 +677,6 @@ Spark.</p></li>
 <td><p>No overflow check</p></td>
 </tr>
 <tr class="row-odd"><td><p>long</p></td>
-<td><p>decimal</p></td>
-<td><p>No overflow check</p></td>
-</tr>
-<tr class="row-even"><td><p>float</p></td>
-<td><p>decimal</p></td>
-<td><p>No overflow check</p></td>
-</tr>
-<tr class="row-odd"><td><p>double</p></td>
 <td><p>decimal</p></td>
 <td><p>No overflow check</p></td>
 </tr>
@@ -635,10 +712,10 @@ Spark.</p></li>
             <p class="prev-next-title">Comet Configuration Settings</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../contributor-guide/contributing.html" title="next page">
+    <a class='right-next' id="next-link" href="tuning.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Contributing to Apache DataFusion Comet</p>
+        <p class="prev-next-title">Tuning Guide</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
