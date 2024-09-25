@@ -119,8 +119,13 @@ under the License.
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="expressions.html">
-   Supported Expressions
+  <a class="reference internal" href="datasources.html">
+   Supported Data Sources
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="datatypes.html">
+   Supported Data Types
   </a>
  </li>
  <li class="toctree-l1">
@@ -129,8 +134,8 @@ under the License.
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="datatypes.html">
-   Supported Data Types
+  <a class="reference internal" href="expressions.html">
+   Supported Expressions
   </a>
  </li>
  <li class="toctree-l1">
@@ -277,6 +282,11 @@ under the License.
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#floating-number-comparison">
+   Floating number comparison
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#cast">
    Cast
   </a>
@@ -361,6 +371,14 @@ be used in production.</p>
 <p>Comet uses the Rust regexp crate for evaluating regular expressions, and this has different behavior from Java’s
 regular expression engine. Comet will fall back to Spark for patterns that are known to produce different results, but
 this can be overridden by setting <code class="docutils literal notranslate"><span class="pre">spark.comet.regexp.allowIncompatible=true</span></code>.</p>
+</section>
+<section id="floating-number-comparison">
+<h2>Floating number comparison<a class="headerlink" href="#floating-number-comparison" title="Link to this heading">¶</a></h2>
+<p>Spark normalizes NaN and zero for floating point numbers for several cases. See <code class="docutils literal notranslate"><span class="pre">NormalizeFloatingNumbers</span></code> optimization rule in Spark.
+However, one exception is comparison. Spark does not normalize NaN and zero when comparing values
+because they are handled well in Spark (e.g., <code class="docutils literal notranslate"><span class="pre">SQLOrderingUtil.compareFloats</span></code>). But the comparison
+functions of arrow-rs used by DataFusion do not normalize NaN and zero (e.g., <a class="reference external" href="https://docs.rs/arrow/latest/arrow/compute/kernels/cmp/fn.eq.html#">arrow::compute::kernels::cmp::eq</a>).
+So Comet will add additional normalization expression of NaN and zero for comparison.</p>
 </section>
 <section id="cast">
 <h2>Cast<a class="headerlink" href="#cast" title="Link to this heading">¶</a></h2>
@@ -692,10 +710,22 @@ Spark.</p></li>
 <td><p>No overflow check</p></td>
 </tr>
 <tr class="row-even"><td><p>string</p></td>
+<td><p>float</p></td>
+<td><p>Does not support inputs ending with ‘d’ or ‘f’. Does not support ‘inf’. Does not support ANSI mode.</p></td>
+</tr>
+<tr class="row-odd"><td><p>string</p></td>
+<td><p>double</p></td>
+<td><p>Does not support inputs ending with ‘d’ or ‘f’. Does not support ‘inf’. Does not support ANSI mode.</p></td>
+</tr>
+<tr class="row-even"><td><p>string</p></td>
+<td><p>decimal</p></td>
+<td><p>Does not support inputs ending with ‘d’ or ‘f’. Does not support ‘inf’. Does not support ANSI mode. Returns 0.0 instead of null if input contains no digits</p></td>
+</tr>
+<tr class="row-odd"><td><p>string</p></td>
 <td><p>timestamp</p></td>
 <td><p>Not all valid formats are supported</p></td>
 </tr>
-<tr class="row-odd"><td><p>binary</p></td>
+<tr class="row-even"><td><p>binary</p></td>
 <td><p>string</p></td>
 <td><p>Only works for binary data representing valid UTF-8 strings</p></td>
 </tr>

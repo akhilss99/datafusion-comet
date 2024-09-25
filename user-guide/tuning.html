@@ -119,8 +119,13 @@ under the License.
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="expressions.html">
-   Supported Expressions
+  <a class="reference internal" href="datasources.html">
+   Supported Data Sources
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="datatypes.html">
+   Supported Data Types
   </a>
  </li>
  <li class="toctree-l1">
@@ -129,8 +134,8 @@ under the License.
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="datatypes.html">
-   Supported Data Types
+  <a class="reference internal" href="expressions.html">
+   Supported Expressions
   </a>
  </li>
  <li class="toctree-l1">
@@ -267,8 +272,18 @@ under the License.
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#metrics">
+   Metrics
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#memory-tuning">
    Memory Tuning
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#memory-tuning-using-cometplugin">
+   Memory Tuning using CometPlugin
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -349,6 +364,13 @@ under the License.
 <section id="tuning-guide">
 <h1>Tuning Guide<a class="headerlink" href="#tuning-guide" title="Link to this heading">¶</a></h1>
 <p>Comet provides some tuning options to help you get the best performance from your queries.</p>
+<section id="metrics">
+<h2>Metrics<a class="headerlink" href="#metrics" title="Link to this heading">¶</a></h2>
+<p>Comet metrics are not directly comparable to Spark metrics in some cases.</p>
+<p><code class="docutils literal notranslate"><span class="pre">CometScanExec</span></code> uses nanoseconds for total scan time. Spark also measures scan time in nanoseconds but converts to
+milliseconds <em>per batch</em> which can result in a large loss of precision. In one case we saw total scan time
+of 41 seconds reported as 23 seconds for example.</p>
+</section>
 <section id="memory-tuning">
 <h2>Memory Tuning<a class="headerlink" href="#memory-tuning" title="Link to this heading">¶</a></h2>
 <p>Comet currently doesn’t share the memory allocation from Spark but owns its own memory allocation.
@@ -361,6 +383,14 @@ Once the memory is not enough, the operator will spill to disk, which will slow 
 <p>Besides, you can also set the memory explicitly by setting <code class="docutils literal notranslate"><span class="pre">spark.comet.memoryOverhead</span></code> to the desired value.
 Comet will allocate at least <code class="docutils literal notranslate"><span class="pre">spark.comet.memory.overhead.min</span></code> memory.</p>
 <p>If both <code class="docutils literal notranslate"><span class="pre">spark.comet.memoryOverhead</span></code> and <code class="docutils literal notranslate"><span class="pre">spark.comet.memory.overhead.factor</span></code> are set, the former will be used.</p>
+</section>
+<section id="memory-tuning-using-cometplugin">
+<h2>Memory Tuning using CometPlugin<a class="headerlink" href="#memory-tuning-using-cometplugin" title="Link to this heading">¶</a></h2>
+<p>Configuring memory for Spark and Comet might be a tedious task as it requires to tune Spark executor overhead memory and Comet memory overhead configs. Comet provides a Spark plugin <code class="docutils literal notranslate"><span class="pre">CometPlugin</span></code> which can be set up to your Spark application to help memory settings.</p>
+<p>For users running the Comet in clusters like Kubernetes or YARN, <code class="docutils literal notranslate"><span class="pre">CometPlugin</span></code> can also make the resource manager respect correctly Comet memory parameters <code class="docutils literal notranslate"><span class="pre">spark.comet.memory*</span></code>.
+it is needed to pass to the starting command line additional Spark configuration parameter <code class="docutils literal notranslate"><span class="pre">--conf</span> <span class="pre">spark.plugins=org.apache.spark.CometPlugin</span></code></p>
+<p>The resource managers respects Apache Spark memory configuration before starting the containers.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">CometPlugin</span></code> plugin overrides <code class="docutils literal notranslate"><span class="pre">spark.executor.memoryOverhead</span></code> adding up the Comet memory configuration.</p>
 </section>
 <section id="shuffle">
 <h2>Shuffle<a class="headerlink" href="#shuffle" title="Link to this heading">¶</a></h2>

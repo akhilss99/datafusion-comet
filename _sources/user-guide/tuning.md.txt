@@ -21,6 +21,14 @@ under the License.
 
 Comet provides some tuning options to help you get the best performance from your queries.
 
+## Metrics
+
+Comet metrics are not directly comparable to Spark metrics in some cases.
+
+`CometScanExec` uses nanoseconds for total scan time. Spark also measures scan time in nanoseconds but converts to
+milliseconds *per batch* which can result in a large loss of precision. In one case we saw total scan time
+of 41 seconds reported as 23 seconds for example.
+
 ## Memory Tuning
 
 Comet currently doesn't share the memory allocation from Spark but owns its own memory allocation.
@@ -36,6 +44,17 @@ Besides, you can also set the memory explicitly by setting `spark.comet.memoryOv
 Comet will allocate at least `spark.comet.memory.overhead.min` memory.
 
 If both `spark.comet.memoryOverhead` and `spark.comet.memory.overhead.factor` are set, the former will be used.
+
+## Memory Tuning using CometPlugin
+Configuring memory for Spark and Comet might be a tedious task as it requires to tune Spark executor overhead memory and Comet memory overhead configs. Comet provides a Spark plugin `CometPlugin` which can be set up to your Spark application to help memory settings.
+
+For users running the Comet in clusters like Kubernetes or YARN, `CometPlugin` can also make the resource manager respect correctly Comet memory parameters `spark.comet.memory*`. 
+it is needed to pass to the starting command line additional Spark configuration parameter `--conf spark.plugins=org.apache.spark.CometPlugin`
+
+The resource managers respects Apache Spark memory configuration before starting the containers.
+
+The `CometPlugin` plugin overrides `spark.executor.memoryOverhead` adding up the Comet memory configuration.
+
 
 ## Shuffle
 

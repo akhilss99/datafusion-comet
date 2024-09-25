@@ -53,7 +53,7 @@ under the License.
     <script async="true" defer="true" src="https://buttons.github.io/buttons.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Supported Spark Expressions" href="expressions.html" />
+    <link rel="next" title="Supported Spark Data Sources" href="datasources.html" />
     <link rel="prev" title="Comet Overview" href="overview.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
@@ -119,8 +119,13 @@ under the License.
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="expressions.html">
-   Supported Expressions
+  <a class="reference internal" href="datasources.html">
+   Supported Data Sources
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="datatypes.html">
+   Supported Data Types
   </a>
  </li>
  <li class="toctree-l1">
@@ -129,8 +134,8 @@ under the License.
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="datatypes.html">
-   Supported Data Types
+  <a class="reference internal" href="expressions.html">
+   Supported Expressions
   </a>
  </li>
  <li class="toctree-l1">
@@ -272,13 +277,23 @@ under the License.
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#supported-apache-spark-versions">
+   Supported Apache Spark versions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#requirements">
    Requirements
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#using-a-published-binary-release">
-   Using a Published Binary Release
+  <a class="reference internal nav-link" href="#deploying-to-kubernetes">
+   Deploying to Kubernetes
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#using-a-published-jar-file">
+   Using a Published JAR File
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -304,6 +319,11 @@ under the License.
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#enable-comet-shuffle">
      Enable Comet shuffle
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#memory-tuning">
+     Memory tuning
     </a>
    </li>
   </ul>
@@ -364,23 +384,46 @@ under the License.
 <li><p>Apple OSX (Intel and Apple Silicon)</p></li>
 </ul>
 </section>
+<section id="supported-apache-spark-versions">
+<h2>Supported Apache Spark versions<a class="headerlink" href="#supported-apache-spark-versions" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>3.3</p></li>
+<li><p>3.4</p></li>
+<li><p>3.5</p></li>
+</ul>
+</section>
 <section id="requirements">
 <h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading">¶</a></h2>
 <ul class="simple">
-<li><p>Apache Spark 3.3, or 3.4</p></li>
+<li><p><a class="reference internal" href="#supported-apache-spark-versions">Apache Spark supported by Comet</a></p></li>
 <li><p>JDK 8 and up</p></li>
 <li><p>GLIBC 2.17 (Centos 7) and up</p></li>
 </ul>
 </section>
-<section id="using-a-published-binary-release">
-<h2>Using a Published Binary Release<a class="headerlink" href="#using-a-published-binary-release" title="Link to this heading">¶</a></h2>
-<p>There are no published binary releases yet.</p>
+<section id="deploying-to-kubernetes">
+<h2>Deploying to Kubernetes<a class="headerlink" href="#deploying-to-kubernetes" title="Link to this heading">¶</a></h2>
+<p>See the <a class="reference internal" href="kubernetes.html"><span class="std std-doc">Comet Kubernetes Guide</span></a> guide.</p>
+</section>
+<section id="using-a-published-jar-file">
+<h2>Using a Published JAR File<a class="headerlink" href="#using-a-published-jar-file" title="Link to this heading">¶</a></h2>
+<p>There are no published JAR files yet.</p>
 </section>
 <section id="using-a-published-source-release">
 <h2>Using a Published Source Release<a class="headerlink" href="#using-a-published-source-release" title="Link to this heading">¶</a></h2>
 <p>Official source releases can be downloaded from https://dist.apache.org/repos/dist/release/datafusion/</p>
-<p>Building from a source release is mostly the same as building directly from the GitHub repository but requires the
-use of the command <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">release-nogit</span></code> instead of <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">release</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Pick<span class="w"> </span>the<span class="w"> </span>latest<span class="w"> </span>version
+<span class="go">export COMET_VERSION=0.2.0</span>
+<span class="gp"># </span>Download<span class="w"> </span>the<span class="w"> </span>tarball
+<span class="go">curl -O &quot;https://dist.apache.org/repos/dist/release/datafusion/datafusion-comet-$COMET_VERSION/apache-datafusion-comet-$COMET_VERSION.tar.gz&quot;</span>
+<span class="gp"># </span>Unpack
+<span class="go">tar -xzf apache-datafusion-comet-$COMET_VERSION.tar.gz</span>
+<span class="go">cd apache-datafusion-comet-$COMET_VERSION</span>
+</pre></div>
+</div>
+<p>Build</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">make release-nogit PROFILES=&quot;-Pspark-3.4&quot;</span>
+</pre></div>
+</div>
 </section>
 <section id="building-from-the-github-repository">
 <h2>Building from the GitHub repository<a class="headerlink" href="#building-from-the-github-repository" title="Link to this heading">¶</a></h2>
@@ -405,17 +448,18 @@ use of the command <code class="docutils literal notranslate"><span class="pre">
 <section id="run-spark-shell-with-comet-enabled">
 <h2>Run Spark Shell with Comet enabled<a class="headerlink" href="#run-spark-shell-with-comet-enabled" title="Link to this heading">¶</a></h2>
 <p>Make sure <code class="docutils literal notranslate"><span class="pre">SPARK_HOME</span></code> points to the same Spark version as Comet was built for.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">export COMET_JAR=spark/target/comet-spark-spark3.4_2.12-0.1.0-SNAPSHOT.jar</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">export COMET_JAR=spark/target/comet-spark-spark3.4_2.12-0.3.0-SNAPSHOT.jar</span>
 
 <span class="gp">$</span>SPARK_HOME/bin/spark-shell<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--jars<span class="w"> </span><span class="nv">$COMET_JAR</span><span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--conf<span class="w"> </span>spark.driver.extraClassPath<span class="o">=</span><span class="nv">$COMET_JAR</span><span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--conf<span class="w"> </span>spark.executor.extraClassPath<span class="o">=</span><span class="nv">$COMET_JAR</span><span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--conf<span class="w"> </span>spark.sql.extensions<span class="o">=</span>org.apache.comet.CometSparkSessionExtensions<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.plugins<span class="o">=</span>org.apache.spark.CometPlugin<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--conf<span class="w"> </span>spark.comet.enabled<span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--conf<span class="w"> </span>spark.comet.exec.enabled<span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--conf<span class="w"> </span>spark.comet.exec.all.enabled<span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--conf<span class="w"> </span>spark.comet.explainFallback.enabled<span class="o">=</span><span class="nb">true</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.comet.explainFallback.enabled<span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.driver.memory<span class="o">=</span>1g<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conf<span class="w"> </span>spark.executor.memory<span class="o">=</span>1g
 </pre></div>
 </div>
 <section id="verify-comet-enabled-for-spark-sql-query">
@@ -463,7 +507,7 @@ Comet native shuffle doesn’t support complex types yet.</p>
 Spark application. Depending on your deployment mode you may also need to set the driver &amp; executor class path(s) to
 explicitly contain Comet otherwise Spark may use a different class-loader for the Comet components than its internal
 components which will then fail at runtime. For example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">driver</span><span class="o">-</span><span class="n">class</span><span class="o">-</span><span class="n">path</span> <span class="n">spark</span><span class="o">/</span><span class="n">target</span><span class="o">/</span><span class="n">comet</span><span class="o">-</span><span class="n">spark</span><span class="o">-</span><span class="n">spark3</span><span class="mf">.4_2.12</span><span class="o">-</span><span class="mf">0.1.0</span><span class="o">-</span><span class="n">SNAPSHOT</span><span class="o">.</span><span class="n">jar</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">driver</span><span class="o">-</span><span class="n">class</span><span class="o">-</span><span class="n">path</span> <span class="n">spark</span><span class="o">/</span><span class="n">target</span><span class="o">/</span><span class="n">comet</span><span class="o">-</span><span class="n">spark</span><span class="o">-</span><span class="n">spark3</span><span class="mf">.4_2.12</span><span class="o">-</span><span class="mf">0.3.0</span><span class="o">-</span><span class="n">SNAPSHOT</span><span class="o">.</span><span class="n">jar</span>
 </pre></div>
 </div>
 <p>Some cluster managers may require additional configuration, see <a class="reference external" href="https://spark.apache.org/docs/latest/cluster-overview.html">https://spark.apache.org/docs/latest/cluster-overview.html</a></p>
@@ -471,6 +515,10 @@ components which will then fail at runtime. For example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">conf</span> <span class="n">spark</span><span class="o">.</span><span class="n">comet</span><span class="o">.</span><span class="n">exec</span><span class="o">.</span><span class="n">shuffle</span><span class="o">.</span><span class="n">mode</span><span class="o">=</span><span class="n">jvm</span>
 </pre></div>
 </div>
+</section>
+<section id="memory-tuning">
+<h3>Memory tuning<a class="headerlink" href="#memory-tuning" title="Link to this heading">¶</a></h3>
+<p>In addition to Apache Spark memory configuration parameters the Comet introduces own parameters to configure memory allocation for native execution. More <a class="reference internal" href="tuning.html"><span class="std std-doc">Comet Memory Tuning</span></a></p>
 </section>
 </section>
 </section>
@@ -488,10 +536,10 @@ components which will then fail at runtime. For example:</p>
             <p class="prev-next-title">Comet Overview</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="expressions.html" title="next page">
+    <a class='right-next' id="next-link" href="datasources.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Supported Spark Expressions</p>
+        <p class="prev-next-title">Supported Spark Data Sources</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
