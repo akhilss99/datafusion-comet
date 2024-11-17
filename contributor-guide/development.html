@@ -48,7 +48,7 @@ under the License.
     <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
   
     <script src="../_static/documentation_options.js?v=8a448e45"></script>
-    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script async="true" defer="true" src="https://buttons.github.io/buttons.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -116,6 +116,16 @@ under the License.
  <li class="toctree-l1">
   <a class="reference internal" href="../user-guide/installation.html">
    Installing Comet
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../user-guide/source.html">
+   Building From Source
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../user-guide/kubernetes.html">
+   Kubernetes Guide
   </a>
  </li>
  <li class="toctree-l1">
@@ -411,8 +421,6 @@ side.</p></li>
 is useful when you want to test Comet local installation in another project
 such as Spark.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">clean</span></code>: clean up the workspace</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bin/comet-spark-shell</span> <span class="pre">-d</span> <span class="pre">.</span> <span class="pre">-o</span> <span class="pre">spark/target/</span></code> run Comet spark shell for V1 datasources</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bin/comet-spark-shell</span> <span class="pre">-d</span> <span class="pre">.</span> <span class="pre">-o</span> <span class="pre">spark/target/</span> <span class="pre">--conf</span> <span class="pre">spark.sql.sources.useV1SourceList=&quot;&quot;</span></code> run Comet spark shell for V2 datasources</p></li>
 </ul>
 </section>
 <section id="development-environment">
@@ -425,6 +433,11 @@ generating protobuf message classes for the JVM side. It’s only required to ru
 <h3>IntelliJ IDEA<a class="headerlink" href="#intellij-idea" title="Link to this heading">¶</a></h3>
 <p>First make sure to install the Scala plugin in IntelliJ IDEA.
 After that, you can open the project in IntelliJ IDEA. The IDE should automatically detect the project structure and import as a Maven project.</p>
+<p>Comet uses generated source files that are too large for IntelliJ’s default size limit for code inspections. To avoid IDE errors
+(missing definitions, etc.) caused by IntelliJ skipping these generated files, modify
+<a class="reference external" href="https://intellij-support.jetbrains.com/hc/en-us/articles/206544869-Configuring-JVM-options-and-platform-properties">IntelliJ’s Platform Properties</a>
+by going to <code class="docutils literal notranslate"><span class="pre">Help</span> <span class="pre">-&gt;</span> <span class="pre">Edit</span> <span class="pre">Custom</span> <span class="pre">Properties...</span></code>. For example, adding <code class="docutils literal notranslate"><span class="pre">idea.max.intellisense.filesize=16384</span></code> increases the file
+size limit to 16 MB.</p>
 </section>
 <section id="clion">
 <h3>CLion<a class="headerlink" href="#clion" title="Link to this heading">¶</a></h3>
@@ -540,7 +553,7 @@ automatically format the code. Before submitting a pull request, you can simply 
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.0.2.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.1.3.<br>
 </p>
     </div>
     
