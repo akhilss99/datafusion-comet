@@ -53,7 +53,7 @@ under the License.
     <script async="true" defer="true" src="https://buttons.github.io/buttons.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Contributing to Apache DataFusion Comet" href="../contributor-guide/contributing.html" />
+    <link rel="next" title="Comet Metrics" href="metrics.html" />
     <link rel="prev" title="Compatibility Guide" href="compatibility.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
@@ -163,6 +163,11 @@ under the License.
    Tuning Guide
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="metrics.html">
+   Metrics Guide
+  </a>
+ </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
@@ -177,7 +182,7 @@ under the License.
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../contributor-guide/plugin_overview.html">
-   Comet Plugin Overview
+   Comet Plugin Architecture
   </a>
  </li>
  <li class="toctree-l1">
@@ -330,16 +335,21 @@ under the License.
      </li>
     </ul>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#shuffle-compression">
+     Shuffle Compression
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#metrics">
-   Metrics
+  <a class="reference internal nav-link" href="#explain-plan">
+   Explain Plan
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#shufflewriterexec">
-     ShuffleWriterExec
+    <a class="reference internal nav-link" href="#extended-explain">
+     Extended Explain
     </a>
    </li>
   </ul>
@@ -462,30 +472,24 @@ native shuffle currently only supports <code class="docutils literal notranslate
 then any shuffle operations that cannot be supported in this mode will fall back to Spark.</p>
 </section>
 </section>
+<section id="shuffle-compression">
+<h3>Shuffle Compression<a class="headerlink" href="#shuffle-compression" title="Link to this heading">¶</a></h3>
+<p>By default, Spark compresses shuffle files using LZ4 compression. Comet overrides this behavior with ZSTD compression.
+Compression can be disabled by setting <code class="docutils literal notranslate"><span class="pre">spark.shuffle.compress=false</span></code>, which may result in faster shuffle times in
+certain environments, such as single-node setups with fast NVMe drives, at the expense of increased disk space usage.</p>
 </section>
-<section id="metrics">
-<h2>Metrics<a class="headerlink" href="#metrics" title="Link to this heading">¶</a></h2>
-<p>Some Comet metrics are not directly comparable to Spark metrics in some cases:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">CometScanExec</span></code> uses nanoseconds for total scan time. Spark also measures scan time in nanoseconds but converts to
-milliseconds <em>per batch</em> which can result in a large loss of precision, making it difficult to compare scan times
-between Spark and Comet.</p></li>
-</ul>
-<p>Comet also adds some custom metrics:</p>
-<section id="shufflewriterexec">
-<h3>ShuffleWriterExec<a class="headerlink" href="#shufflewriterexec" title="Link to this heading">¶</a></h3>
-<table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Metric</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">jvm_fetch_time</span></code></p></td>
-<td><p>Measure the time it takes for <code class="docutils literal notranslate"><span class="pre">ShuffleWriterExec</span></code> to fetch batches from the JVM. Note that this does not include the execution time of the query that produced the input batches.</p></td>
-</tr>
-</tbody>
-</table>
+</section>
+<section id="explain-plan">
+<h2>Explain Plan<a class="headerlink" href="#explain-plan" title="Link to this heading">¶</a></h2>
+<section id="extended-explain">
+<h3>Extended Explain<a class="headerlink" href="#extended-explain" title="Link to this heading">¶</a></h3>
+<p>With Spark 4.0.0 and newer, Comet can provide extended explain plan information in the Spark UI. Currently this lists
+reasons why Comet may not have been enabled for specific operations.
+To enable this, in the Spark configuration, set the following:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>-c<span class="w"> </span>spark.sql.extendedExplainProviders<span class="o">=</span>org.apache.comet.ExtendedExplainInfo
+</pre></div>
+</div>
+<p>This will add a section to the detailed plan displayed in the Spark SQL UI page.</p>
 </section>
 </section>
 </section>
@@ -503,10 +507,10 @@ between Spark and Comet.</p></li>
             <p class="prev-next-title">Compatibility Guide</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../contributor-guide/contributing.html" title="next page">
+    <a class='right-next' id="next-link" href="metrics.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Contributing to Apache DataFusion Comet</p>
+        <p class="prev-next-title">Comet Metrics</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
